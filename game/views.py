@@ -597,38 +597,71 @@ def verify_otp(request):
 
     if request.method == 'POST':
         entered_otp = request.POST.get('otp', '').strip()
-        # Verify hash
-        entered_otp_hash = hashlib.sha256(f"{entered_otp}:{settings.SECRET_KEY}".encode()).hexdigest()
+
+        entered_otp_hash = hashlib.sha256(
+            f"{entered_otp}:{settings.SECRET_KEY}".encode()
+        ).hexdigest()
 
         if entered_otp_hash == stored_otp_hash:
             try:
                 user = User.objects.get(id=user_id)
                 user.is_active = True
+                user.full_clean()
                 user.save()
 
-                # Clear session data
                 del request.session['registration_user_id']
                 del request.session['registration_otp_hash']
 
                 login(request, user)
-                messages.success(request, 'Registration successful! Welcome to Checkora.')
+                messages.success(
+                    request,
+                    'Registration successful! Welcome to Checkora.'
+                )
                 request.session.cycle_key()
                 return redirect('index')
 
             except User.DoesNotExist:
                 messages.error(
-                    request, 'User not found. Please register again.'
+                    request,
+                    'User not found. Please register again.'
                 )
                 return redirect('register')
+
         else:
             messages.error(request, 'Invalid OTP. Please try again.')
 
     remaining_time = 0
     last_otp_time = request.session.get('last_otp_time')
+
     if last_otp_time:
         elapsed = int(time.time() - last_otp_time)
         remaining_time = max(0, 60 - elapsed)
-    return render(request, 'game/verify_otp.html', {'remaining_time': remaining_time})
+
+    try:
+        user = User.objects.get(id=user_id)
+        email = user.email
+
+        if email and '@' in email:
+            name, domain = email.split('@', 1)
+            if len(name) <= 2:
+                masked_name = name[:1]
+            else:
+                masked_name = name[:2] + '*' * (len(name) - 2)
+            user_email = f"{masked_name}@{domain}"
+        else:
+            user_email = None
+
+    except User.DoesNotExist:
+        user_email = None
+
+    return render(
+        request,
+        'game/verify_otp.html',
+        {
+            'remaining_time': remaining_time,
+            'user_email': user_email,
+        }
+    )
 
 def resend_otp(request):
     user_id = request.session.get('registration_user_id')
