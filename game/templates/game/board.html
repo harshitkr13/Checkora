@@ -39,6 +39,7 @@
 
 
 <body>
+    <div style="display:none" aria-hidden="true">{% csrf_token %}</div>
 
     <!-- MOBILE FAB -->
 <div class="m-fab" id="mFab">
@@ -63,7 +64,7 @@
     <div class="promo-overlay active" id="welcomeOverlay" style="background: var(--page-bg); z-index: 10000;">
         <div class="promo-dialog">
             <div style="margin-bottom: 20px; color:#f0c040;">
-                <a href="{% url 'landing' %}" id="exitToMenuBtn" class="btn" >← Back to Home</a>
+                <a href="/" class="back-btn">← Back to Home</a>
             </div>
             <div class="promo-title"
                 style="font-size: 1.6rem; margin-bottom: 10px; display: flex; align-items: center; justify-content: center; gap: 8px;">
@@ -330,7 +331,7 @@
                     <span id="status-text">Online</span>
                 </div>
 
-                <div class="streak-counter">
+                <div id="streak-counter" class="streak-counter" style="display:none;">
                     🔥 <span id="streak-count">0</span> Day Streak
                 </div>
 
@@ -416,7 +417,7 @@
                     <button class="btn btn-gold" id="newPvPBtn">Pass & Play (PvP)</button>
                     <button class="btn btn-gold" id="newAIBtn">Play vs AI</button>
                     <button type="button" class="btn btn-gold" id="dailyPuzzleBtn">Daily Puzzle</button>
-                    <button type="button" id="restartPuzzleBtn" style="display:none;">Restart Puzzle</button>
+                    <button type="button" class="btn btn-gold" id="restartPuzzleBtn" style="display:none;">Restart Puzzle</button>
                     <button class="btn btn-gold" id="copyFenBtn">Copy FEN</button>
                     <button class="btn btn-gold" id="muteBtn" type="button" aria-pressed="true">🔊 Sound On</button>
                     <button class="btn btn-gold" id="newFenBtn">Load Game</button>
@@ -431,9 +432,9 @@
                         onclick="document.getElementById('rulebookModal').style.display='flex'">📖 Rulebook</button>
                 </div>
                 <a href="/" class="btn" 
-                style="background: #2a1414; color: #ff6b6b; margin-top: 1rem; margin-bottom: 1.5rem; border: 1px solid #632424; text-decoration: none; text-align: center; display: block; line-height: 2.5;">
-                 EXIT TO HOME <span class="btn-shortcut">H</span>
-        </a>
+   style="background: #2a1414; color: #ff6b6b;margin-top: 1rem;margin-bottom: 1.5rem; border: 1px solid #632424; text-decoration: none; text-align: center; display: block; line-height: 2.5;">
+    EXIT TO HOME
+</a>
             </div>
         </div>
 
@@ -527,12 +528,12 @@
     </div>
 
    <!-- ========== LEAVE GAME CONFIRMATION MODAL ========== -->
-<div class="promo-overlay" id="leaveConfirmOverlay" style="display:none;">
-    <div class="promo-dialog" style="max-width: 340px; text-align: center;">
-        <div class="promo-title" style="font-size: 1.3rem; color: #f0c040; margin-bottom: 10px;">
+<div class="promo-overlay" id="leaveConfirmOverlay" role="dialog" aria-modal="true" aria-labelledby="leaveConfirmTitle" aria-describedby="leaveConfirmMessage" aria-hidden="true">
+    <div class="promo-dialog" id="leaveConfirmDialog" tabindex="-1" style="max-width: 340px; text-align: center;">
+        <div class="promo-title" id="leaveConfirmTitle" style="font-size: 1.3rem; color: #f0c040; margin-bottom: 10px;">
             Leave the Game?
         </div>
-        <p style="color: #ccc; margin-bottom: 25px; font-size: 0.95rem;">
+        <p id="leaveConfirmMessage" style="color: #ccc; margin-bottom: 25px; font-size: 0.95rem;">
             Are you sure you want to go back to Home? Your current game progress will be lost.
         </p>
         <div style="display: flex; gap: 12px; justify-content: center;">

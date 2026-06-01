@@ -69,7 +69,6 @@ Join our Discord community for updates, support, and games: https://discord.gg/D
 | Material Score Panel | Live material advantage tracking that updates dynamically during gameplay                           |
 | REST API             | Clean JSON endpoints powering a decoupled frontend                                                  |
 | PvP & PvE Modes      | Play against a friend or challenge the AI                                                           |
-| FAQ                  | In-page frequently asked questions accessible from the landing page                                 |
 
 ---
 
@@ -107,7 +106,7 @@ python manage.py migrate
 python manage.py runserver
 ```
 
-Open `http://127.0.0.1:8000/` in your browser and start playing.
+Open **`http://127.0.0.1:8000/`** in your browser and start playing. The terminal shows this same address — always use **`http://`**, never **`https://`**, because the development server does not support SSL.
 
 ### Compile the C++ Engine _(optional but recommended)_
 
@@ -187,14 +186,13 @@ Checkora/
 │   │       └── favicon.jpeg       # Small browser favicon
 │   ├── templates/                 # Server-side HTML render blueprints
 │   │   ├── 404.html               # Custom 404 error page template
-│   │   ├── 500.html               # Custom 500 error page template
 │   │   ├── robots.txt             # Web crawler configuration instructions
 │   │   ├── sitemap.xml            # SEO indexing guide
 │   │   └── game/                  # Namespace folder matching Django conventions
 │   │       ├── includes/          # Reusable UI partial layout blocks
 │   │       │   └── messages.html  # Banner rendering Django alert notifications
 │   │       ├── board.html         # Interactive gameplay chessboard and player cards
-│   │       ├── landing.html       # Mode lobby selection screen with integrated FAQ, Privacy Policy, Terms & Conditions, and Contact Us modals
+│   │       ├── landing.html       # Mode lobby selection screen
 │   │       ├── login.html         # Sign-in form interface
 │   │       ├── register.html      # Create account interface
 │   │       ├── verify_otp.html    # Two-factor verification panel
@@ -579,6 +577,16 @@ If you already have another service running on your local port 8000, Django will
     ```bash
     python manage.py runserver 8080
     ```
+
+### 🔒 7. Local SSL Error (`ERR_SSL_PROTOCOL_ERROR`)
+
+If the browser shows `ERR_SSL_PROTOCOL_ERROR` or the terminal prints *"You're accessing the development server over HTTPS, but it only supports HTTP"*, the browser is using HTTPS against the local HTTP dev server.
+
+*   **Resolution:**
+    1. Copy the example env file if you have not already: `copy .env.example .env` (Windows) or `cp .env.example .env` (macOS/Linux).
+    2. Copy the exact URL from the terminal, for example **`http://127.0.0.1:8000/`** — include `http://` and do not let the browser change it to `https://`.
+    3. Disable your browser's HTTPS-upgrade setting for local development (for example, Chrome/Brave: "Always use secure connections" / "Upgrade connections to HTTPS").
+    4. Clear cached HSTS for `127.0.0.1` if the browser keeps forcing HTTPS (Chrome/Brave: `chrome://net-internals/#hsts`; steps vary by browser).
 
 ## Contributor Support & Feedback
 
