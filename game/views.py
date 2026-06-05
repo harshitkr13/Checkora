@@ -2013,13 +2013,11 @@ def lesson_detail_view(request, lesson_name):
                     "expected_move": "d5-d6"
                 }
             ],
-
             "practice_position": {
                 "d5": "P",
                 "e1": "K"
             },
         },
-
         "King Safety": {
             "title": "King Safety",
             "description": "Keep your king protected throughout the game.",
