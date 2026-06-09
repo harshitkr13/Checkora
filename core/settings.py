@@ -165,7 +165,7 @@ if IS_PRODUCTION:
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
-# Email Configuration for OTP and Password Reset EMails
+# Email Configuration for OTP and Password Reset Emails
 if DEBUG:
     # Local development: print OTP directly to your terminal screen
     EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
@@ -176,7 +176,8 @@ else:
         'EMAIL_BACKEND', 
         'django.core.mail.backends.smtp.EmailBackend'
     )
-    DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', '')
+    # FIX: Provide a valid fallback string instead of an empty string ''
+    DEFAULT_FROM_EMAIL = os.getenv('EMAIL_HOST_USER', 'noreply@checkora.app')
 
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
