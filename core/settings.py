@@ -172,7 +172,8 @@ else:
     _DEFAULT_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
 # Env var override must still win, explicit .env value takes priority
-EMAIL_BACKEND = os.getenv('EMAIL_BACKEND', _DEFAULT_BACKEND)
+# Fixed: Using 'or' ensures that empty string values in .env fall back safely to _DEFAULT_BACKEND
+EMAIL_BACKEND = os.getenv('EMAIL_BACKEND') or _DEFAULT_BACKEND
 
 # DO NOT TOUCH - Keep remaining settings exactly as they were originally
 EMAIL_HOST = 'smtp.gmail.com'
